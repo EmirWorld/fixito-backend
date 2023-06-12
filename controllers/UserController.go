@@ -6,8 +6,11 @@ import (
 	"fixito-backend/models"
 	"fixito-backend/responses"
 	"fixito-backend/validators"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -89,5 +92,41 @@ func CreateUser() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusCreated, responses.UserResponse{Status: http.StatusCreated, Message: "User created successfully", Data: map[string]interface{}{"data": result}})
+	}
+}
+
+// GetUser retrieves a user by ID.
+// @Summary Get user
+// @Description Retrieves a user by ID
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param userId path string true "User ID"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /api/user/{userId} [get]
+func GetUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		userId := c.Param("userId")
+		var user *models.UserPublic
+		defer cancel()
+		objId, _ := primitive.ObjectIDFromHex(userId)
+		fmt.Println(objId)
+		fmt.Println(userId)
+
+		err := userCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				c.JSON(http.StatusNotFound, responses.UserResponse{Status: http.StatusNotFound, Message: "User not found", Data: map[string]interface{}{"data": nil}})
+				return
+			}
+			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "Error getting user", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		c.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "User retrieved successfully", Data: map[string]interface{}{"data": user}})
 	}
 }

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"strings"
@@ -9,6 +10,7 @@ import (
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
+		fmt.Println(c.GetHeader("Authorization"))
 		if tokenString == "" {
 			c.AbortWithStatusJSON(401, gin.H{"message": "Missing Authorization Header"})
 			return

@@ -4,10 +4,12 @@ import (
 	"context"
 	"fixito-backend/models"
 	"fixito-backend/responses"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -80,7 +82,9 @@ func Login() gin.HandlerFunc {
 		}
 
 		var user *models.User
-		err := userCollection.FindOne(context.Background(), models.User{Email: credentials.Email}).Decode(&user)
+		err := userCollection.FindOne(context.Background(), bson.M{"email": credentials.Email}).Decode(&user)
+		fmt.Println(user.Password)
+		fmt.Println(credentials.Password)
 		if err != nil {
 			if err == mongo.ErrNoDocuments {
 				c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid email or password", Data: map[string]interface{}{"data": nil}})

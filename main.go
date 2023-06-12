@@ -14,7 +14,6 @@ import (
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-
 func main() {
 	r := gin.New()
 	gob.Register(time.Time{})

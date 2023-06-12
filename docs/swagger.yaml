@@ -115,6 +115,39 @@ paths:
       summary: Create a new user
       tags:
       - Users
+  /api/user/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Get user
+      tags:
+      - Users
 securityDefinitions:
   BearerAuth:
     in: header

@@ -12,8 +12,11 @@ var SetupRouter = func(router *gin.Engine) {
 	v1api := router.Group("/v1/api")
 	{
 
+		//PUBLIC ROUTER
+
 		//Auth Routes
 		v1api.POST("auth/login", controllers.Login())
+		v1api.POST("auth/logout", controllers.Logout())
 
 		//User Routes
 		v1api.POST("/user", controllers.CreateUser())
@@ -21,8 +24,14 @@ var SetupRouter = func(router *gin.Engine) {
 		// Apply the AuthMiddleware to the protected group
 		protectedGroup := v1api.Group("", middleware.AuthMiddleware())
 		{
-			// Protected Routes
+			// PRIVATE ROUTER
+
+			//User Routes
+			protectedGroup.GET("/user/current", controllers.GetCurrentUser())
 			protectedGroup.GET("/user/:userId", controllers.GetUser())
+			protectedGroup.PUT("/user/:userId", controllers.UpdateUser())
+			protectedGroup.DELETE("/user/:userId", controllers.DeleteUser())
+
 		}
 
 	}

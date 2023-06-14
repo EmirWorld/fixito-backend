@@ -3,7 +3,7 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type UserPublic struct {
-	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty""`
+	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	FirstName string             `json:"first_name" bson:"first_name" validate:"required"`
 	LastName  string             `json:"last_name" bson:"last_name" validate:"required"`
 	Email     string             `json:"email" bson:"email" validate:"required"`
@@ -12,15 +12,15 @@ type UserPublic struct {
 }
 
 type NewUser struct {
-	FirstName string `json:"first_name" bson:"first_name" validate:"required"`
-	LastName  string `json:"last_name" bson:"last_name" validate:"required"`
-	Email     string `json:"email" bson:"email" validate:"required"`
-	Password  string `json:"password" bson:"password" validate:"required"`
-	Location  string `json:"location" bson:"location" validate:"required"`
+	FirstName string `json:"first_name" bson:"first_name" validate:"required" example:"John"`
+	LastName  string `json:"last_name" bson:"last_name" validate:"required" example:"Doe"`
+	Email     string `json:"email" bson:"email" validate:"required" example:"johndoe@mail.com"`
+	Password  string `json:"password" bson:"password" validate:"required" example:"password123"`
+	Location  string `json:"location" bson:"location" validate:"required" example:"New York"`
 }
 
 type User struct {
-	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty""`
+	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	FirstName string             `json:"first_name" bson:"first_name" validate:"required"`
 	LastName  string             `json:"last_name" bson:"last_name" validate:"required"`
 	Email     string             `json:"email" bson:"email" validate:"required"`

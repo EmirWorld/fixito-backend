@@ -1,16 +1,25 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"strings"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		authSession := sessions.Default(c)
+
+		// Check if user is authenticated
+		isAuthenticated := authSession.Get("authenticated")
+		if isAuthenticated != true {
+			c.AbortWithStatusJSON(401, gin.H{"message": "User is not logged in"})
+			return
+		}
+
+		// Check if access token is valid
 		tokenString := c.GetHeader("Authorization")
-		fmt.Println(c.GetHeader("Authorization"))
 		if tokenString == "" {
 			c.AbortWithStatusJSON(401, gin.H{"message": "Missing Authorization Header"})
 			return
@@ -34,6 +43,15 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if !token.Valid {
 			c.AbortWithStatusJSON(401, gin.H{"message": "Invalid Token"})
+			return
+		}
+
+		// Check if token is for current user
+		userIDFromToken := token.Claims.(jwt.MapClaims)["user_id"].(string)
+		currentUserID := authSession.Get("user_id").(string)
+
+		if userIDFromToken != currentUserID {
+			c.AbortWithStatusJSON(401, gin.H{"message": "Token is not for current user"})
 			return
 		}
 

@@ -2,8 +2,10 @@ definitions:
   models.Credentials:
     properties:
       email:
+        example: emirkovacevic@protonmail.com
         type: string
       password:
+        example: 408660As!
         type: string
     required:
     - email
@@ -12,14 +14,19 @@ definitions:
   models.NewUser:
     properties:
       email:
+        example: johndoe@mail.com
         type: string
       first_name:
+        example: John
         type: string
       last_name:
+        example: Doe
         type: string
       location:
+        example: New York
         type: string
       password:
+        example: password123
         type: string
     required:
     - email
@@ -85,6 +92,33 @@ paths:
       summary: Log in a user
       tags:
       - Auth
+  /api/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out a user and clears the session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.AuthResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.AuthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.AuthResponse'
+      summary: Logout a user
+      tags:
+      - Auth
   /api/user:
     post:
       consumes:
@@ -116,6 +150,34 @@ paths:
       tags:
       - Users
   /api/user/{userId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user with the given user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Delete a user
+      tags:
+      - Users
     get:
       consumes:
       - application/json
@@ -145,7 +207,72 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/responses.UserResponse'
+      security:
+      - BearerAuth: []
       summary: Get user
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update a user with the given user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: User object to update
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      summary: Update a user
+      tags:
+      - Users
+  /api/user/current:
+    get:
+      consumes:
+      - application/json
+      description: Get the details of the session user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.UserResponse'
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
       tags:
       - Users
 securityDefinitions:

@@ -118,8 +118,27 @@ func Login() gin.HandlerFunc {
 	}
 }
 
+// Logout godoc
+// @Summary Logout a user
+// @Description Logs out a user and clears the session
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} responses.AuthResponse
+// @Failure 400 {object} responses.AuthResponse
+// @Failure 401 {object} responses.AuthResponse
+// @Failure 500 {object} responses.AuthResponse
+// @Router /api/auth/logout [post]
 func Logout() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
+		//delete session
+		authSessions := sessions.Default(c)
+		authSessions.Clear()
+		err := authSessions.Save()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.AuthResponse{Status: http.StatusInternalServerError, Message: "Error deleting session", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+		c.JSON(http.StatusOK, responses.AuthResponse{Status: http.StatusOK, Message: "Logout successful", Data: nil})
 	}
 }

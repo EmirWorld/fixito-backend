@@ -7,6 +7,7 @@ import (
 	"fixito-backend/responses"
 	"fixito-backend/validators"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,6 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -107,6 +109,7 @@ func CreateUser() gin.HandlerFunc {
 // @Failure 404 {object} responses.UserResponse
 // @Failure 500 {object} responses.UserResponse
 // @Router /api/user/{userId} [get]
+// @Security BearerAuth
 func GetUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -128,5 +131,169 @@ func GetUser() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "User retrieved successfully", Data: map[string]interface{}{"data": user}})
+	}
+}
+
+// UpdateUser updates a user with the given user ID.
+// @Summary Update a user
+// @Description Update a user with the given user ID
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param userId path string true "User ID"
+// @Param user body models.NewUser true "User object to update"
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /api/user/{userId} [put]
+func UpdateUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		userId := c.Param("userId")
+		var user *models.NewUser
+		defer cancel()
+		objId, _ := primitive.ObjectIDFromHex(userId)
+
+		err := c.BindJSON(&user)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid input fields", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		//Validate password length and complexity
+		errorMessage, ok := validators.ValidatePassword(user.Password)
+		if !ok {
+			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid password", Data: map[string]interface{}{"data": errorMessage}})
+			return
+		}
+
+		// Hash password
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "Error hashing password", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		//Update user in database
+		update := bson.M{"firstName": user.FirstName, "lastName": user.LastName, "email": user.Email, "password": string(hashedPassword), "location": user.Location}
+		result, err := userCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "Error updating user", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		var updatedUser *models.UserPublic
+		if result.MatchedCount == 1 {
+			err := userCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedUser)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "Error getting updated user", Data: map[string]interface{}{"data": err.Error()}})
+				return
+			}
+		}
+		c.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "User updated successfully", Data: map[string]interface{}{"data": updatedUser}})
+	}
+}
+
+// DeleteUser deletes a user with the given user ID.
+// @Summary Delete a user
+// @Description Delete a user with the given user ID
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param userId path string true "User ID"
+// @Success 200 {object} responses.UserResponse
+// @Failure 404 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /api/user/{userId} [delete]
+func DeleteUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		userId := c.Param("userId")
+		defer cancel()
+		objId, _ := primitive.ObjectIDFromHex(userId)
+
+		result, err := userCollection.DeleteOne(ctx, bson.M{"_id": objId})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "Error deleting user", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		if result.DeletedCount == 0 {
+			c.JSON(http.StatusNotFound, responses.UserResponse{Status: http.StatusNotFound, Message: "User not found", Data: map[string]interface{}{"data": nil}})
+			return
+		}
+
+		c.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "User deleted successfully", Data: map[string]interface{}{"data": nil}})
+	}
+}
+
+// GetCurrentUser @Summary Get current user
+// @Description Get the details of the session user
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Security BearerAuth
+// @Success 200 {object} responses.UserResponse
+// @Failure 400 {object} responses.UserResponse
+// @Failure 401 {object} responses.UserResponse
+// @Failure 500 {object} responses.UserResponse
+// @Router /api/user/current [get]
+// @Security BearerAuth
+func GetCurrentUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tokenString := c.GetHeader("Authorization")
+		if tokenString == "" {
+			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid token"}})
+			return
+		}
+
+		//remove the Bearer prefix from the token
+		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
+
+		// Parse and validate the token
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			// Make sure that the signing method is HMAC
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+
+			// Return the secret key
+			return []byte("secret_key"), nil
+		})
+		if err != nil {
+			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		if !token.Valid {
+			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid token"}})
+			return
+		}
+
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid token claims"}})
+			return
+		}
+
+		fmt.Println(claims)
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		userID, ok := claims["user_id"].(string)
+		objId, _ := primitive.ObjectIDFromHex(userID)
+		defer cancel()
+		if !ok {
+			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid  user claims"}})
+			return
+		}
+		var user *models.UserPublic
+
+		err = userCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "Error getting user", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		c.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success", Data: map[string]interface{}{"data": user}})
 	}
 }

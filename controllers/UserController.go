@@ -3,11 +3,11 @@ package controllers
 import (
 	"context"
 	"fixito-backend/config"
+	"fixito-backend/helpers"
 	"fixito-backend/models"
 	"fixito-backend/responses"
 	"fixito-backend/validators"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,7 +15,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -227,7 +226,8 @@ func DeleteUser() gin.HandlerFunc {
 	}
 }
 
-// GetCurrentUser @Summary Get current user
+// GetCurrentUser
+// @Summary Get current user
 // @Description Get the details of the session user
 // @Tags Users
 // @Accept  json
@@ -241,42 +241,11 @@ func DeleteUser() gin.HandlerFunc {
 // @Security BearerAuth
 func GetCurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.GetHeader("Authorization")
-		if tokenString == "" {
-			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid token"}})
-			return
-		}
-
-		//remove the Bearer prefix from the token
-		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
-
-		// Parse and validate the token
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			// Make sure that the signing method is HMAC
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-			}
-
-			// Return the secret key
-			return []byte("secret_key"), nil
-		})
+		claims, err := helpers.GetClaims(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": err.Error()}})
 			return
 		}
-
-		if !token.Valid {
-			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid token"}})
-			return
-		}
-
-		claims, ok := token.Claims.(jwt.MapClaims)
-		if !ok {
-			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid token claims"}})
-			return
-		}
-
-		fmt.Println(claims)
 
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		userID, ok := claims["user_id"].(string)

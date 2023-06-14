@@ -35,7 +35,27 @@ definitions:
     - location
     - password
     type: object
+  models.Organisation:
+    properties:
+      _id:
+        type: string
+      name:
+        example: My Organization
+        type: string
+    required:
+    - name
+    type: object
   responses.AuthResponse:
+    properties:
+      data:
+        additionalProperties: true
+        type: object
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  responses.OrganisationResponse:
     properties:
       data:
         additionalProperties: true
@@ -119,6 +139,135 @@ paths:
       summary: Logout a user
       tags:
       - Auth
+  /api/organisation:
+    post:
+      consumes:
+      - application/json
+      description: Creates an organisation
+      parameters:
+      - description: Organisation data
+        in: body
+        name: organisation
+        required: true
+        schema:
+          $ref: '#/definitions/models.Organisation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+      security:
+      - BearerAuth: []
+      summary: Create an organisation
+      tags:
+      - Organisation
+  /api/organisation/{organisationId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an organisation
+      parameters:
+      - description: Organisation ID
+        in: path
+        name: organisationId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete an organisation
+      tags:
+      - Organisation
+    get:
+      consumes:
+      - application/json
+      description: Gets an organisation
+      parameters:
+      - description: Organisation ID
+        in: path
+        name: organisationId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+      security:
+      - BearerAuth: []
+      summary: Get an organisation
+      tags:
+      - Organisation
+    put:
+      consumes:
+      - application/json
+      description: Updates an organisation
+      parameters:
+      - description: Organisation ID
+        in: path
+        name: organisationId
+        required: true
+        type: string
+      - description: Organisation object to be updated
+        in: body
+        name: organisation
+        required: true
+        schema:
+          $ref: '#/definitions/models.Organisation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+      security:
+      - BearerAuth: []
+      summary: Update an organisation
+      tags:
+      - Organisation
   /api/user:
     post:
       consumes:
@@ -273,6 +422,7 @@ paths:
       security:
       - BearerAuth: []
       - BearerAuth: []
+      summary: Get current user
       tags:
       - Users
 securityDefinitions:

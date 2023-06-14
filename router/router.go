@@ -32,6 +32,11 @@ var SetupRouter = func(router *gin.Engine) {
 			protectedGroup.PUT("/user/:userId", controllers.UpdateUser())
 			protectedGroup.DELETE("/user/:userId", controllers.DeleteUser())
 
+			//Organization Routes
+			protectedGroup.POST("/organisation", controllers.CreateOrganisation())
+			protectedGroup.GET("/organisation/:organisationId", controllers.GetOrganisation())
+			protectedGroup.PUT("/organisation/:organisationId", controllers.UpdateOrganisation())
+
 		}
 
 	}

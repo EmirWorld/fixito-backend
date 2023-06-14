@@ -97,6 +97,209 @@
                 }
             }
         },
+        "/api/organisation": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates an organisation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Organisation"
+                ],
+                "summary": "Create an organisation",
+                "parameters": [
+                    {
+                        "description": "Organisation data",
+                        "name": "organisation",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Organisation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organisation/{organisationId}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets an organisation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Organisation"
+                ],
+                "summary": "Get an organisation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organisation ID",
+                        "name": "organisationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates an organisation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Organisation"
+                ],
+                "summary": "Update an organisation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organisation ID",
+                        "name": "organisationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Organisation object to be updated",
+                        "name": "organisation",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Organisation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes an organisation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Organisation"
+                ],
+                "summary": "Delete an organisation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organisation ID",
+                        "name": "organisationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.OrganisationResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user": {
             "post": {
                 "description": "Create a new user",
@@ -163,6 +366,7 @@
                 "tags": [
                     "Users"
                 ],
+                "summary": "Get current user",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -390,7 +594,37 @@
                 }
             }
         },
+        "models.Organisation": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "My Organization"
+                }
+            }
+        },
         "responses.AuthResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.OrganisationResponse": {
             "type": "object",
             "properties": {
                 "data": {

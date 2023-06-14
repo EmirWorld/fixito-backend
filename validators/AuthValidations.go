@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+func UserIsAdmin(tokenString string) bool {
+
+	return true
+}
+
 func IsValidRefreshToken(refreshToken string) bool {
 	// Check if refresh token is blacklisted or expired
 	if isBlacklistedRefreshToken(refreshToken) || isExpiredRefreshToken(refreshToken) {

@@ -46,15 +46,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Check if token is for current user
-		userIDFromToken := token.Claims.(jwt.MapClaims)["user_id"].(string)
-		currentUserID := authSession.Get("user_id").(string)
-
-		if userIDFromToken != currentUserID {
-			c.AbortWithStatusJSON(401, gin.H{"message": "Token is not for current user"})
-			return
-		}
-
 		c.Next()
 	}
 }

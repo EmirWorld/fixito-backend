@@ -27,7 +27,7 @@ var validate = validator.New()
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param user body models.NewUser true "Create User"
+// @Param user body models.UserNew true "Create User"
 // @Success 200 {object} responses.UserResponse
 // @Failure 400 {object} responses.UserResponse
 // @Failure 500 {object} responses.UserResponse
@@ -35,7 +35,7 @@ var validate = validator.New()
 func CreateUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		var user *models.NewUser
+		var user *models.UserNew
 		defer cancel()
 
 		//Validate the request body
@@ -140,16 +140,17 @@ func GetUser() gin.HandlerFunc {
 // @Accept json
 // @Produce json
 // @Param userId path string true "User ID"
-// @Param user body models.NewUser true "User object to update"
+// @Param user body models.UserNew true "User object to update"
 // @Success 200 {object} responses.UserResponse
 // @Failure 400 {object} responses.UserResponse
 // @Failure 500 {object} responses.UserResponse
 // @Router /api/user/{userId} [put]
+// @Security BearerAuth
 func UpdateUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		userId := c.Param("userId")
-		var user *models.NewUser
+		var user *models.UserNew
 		defer cancel()
 		objId, _ := primitive.ObjectIDFromHex(userId)
 
@@ -204,12 +205,15 @@ func UpdateUser() gin.HandlerFunc {
 // @Failure 404 {object} responses.UserResponse
 // @Failure 500 {object} responses.UserResponse
 // @Router /api/user/{userId} [delete]
+// @Security BearerAuth
 func DeleteUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		userId := c.Param("userId")
 		defer cancel()
 		objId, _ := primitive.ObjectIDFromHex(userId)
+
+		//TODO: Delete user's organisation and items
 
 		result, err := userCollection.DeleteOne(ctx, bson.M{"_id": objId})
 		if err != nil {

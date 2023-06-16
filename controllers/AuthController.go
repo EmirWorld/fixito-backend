@@ -16,6 +16,7 @@ import (
 	"time"
 )
 
+// generateToken generates a JWT token and stores it in the session
 func generateToken(user models.User, c *gin.Context) error {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
@@ -54,12 +55,7 @@ func generateToken(user models.User, c *gin.Context) error {
 // @Tags Auth
 // @Accept json
 // @Produce json
-//
-//	@Param credentials body models.Credentials true "User credentials" default({
-//	    "email": "user@example.com",
-//	    "password": "password123"
-//	})
-//
+// @Param credentials body models.Credentials true "User credentials"
 // @Success 200 {object} responses.AuthResponse
 // @Failure 400 {object} responses.AuthResponse
 // @Failure 401 {object} responses.AuthResponse

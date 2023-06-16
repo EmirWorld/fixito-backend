@@ -109,6 +109,156 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/item/{itemId}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets an item",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Get an item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Item ID",
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/item/{organisationId}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates an item",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Create an item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organisation ID",
+                        "name": "organisationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Item data",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ItemNew"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/items/{organisationId}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "Get items",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organisation ID",
+                        "name": "organisationId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/organisation": {
             "post": {
                 "security": [
@@ -134,7 +284,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Organisation"
+                            "$ref": "#/definitions/models.OrganisationNew"
                         }
                     }
                 ],
@@ -239,7 +389,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Organisation"
+                            "$ref": "#/definitions/models.OrganisationNew"
                         }
                     }
                 ],
@@ -332,7 +482,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.NewUser"
+                            "$ref": "#/definitions/models.UserNew"
                         }
                     }
                 ],
@@ -462,6 +612,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update a user with the given user ID",
                 "consumes": [
                     "application/json"
@@ -487,7 +642,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.NewUser"
+                            "$ref": "#/definitions/models.UserNew"
                         }
                     }
                 ],
@@ -513,6 +668,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete a user with the given user ID",
                 "consumes": [
                     "application/json"
@@ -570,11 +730,86 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
-                    "example": "408660As!"
+                    "example": "password123As!"
                 }
             }
         },
-        "models.NewUser": {
+        "models.ItemNew": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "price",
+                "quantity"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "My Item Description"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "My Item"
+                },
+                "price": {
+                    "$ref": "#/definitions/models.Price"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 123
+                }
+            }
+        },
+        "models.OrganisationNew": {
+            "type": "object",
+            "required": [
+                "address",
+                "description",
+                "logo",
+                "name",
+                "phone"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "123 Main St"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "My Organization Description"
+                },
+                "logo": {
+                    "type": "string",
+                    "example": "https://www.example.com/logo.png"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "My Organization"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "1234567890"
+                }
+            }
+        },
+        "models.Price": {
+            "type": "object",
+            "required": [
+                "amount",
+                "currency"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "example": 123
+                },
+                "currency": {
+                    "type": "string",
+                    "example": "USD"
+                }
+            }
+        },
+        "models.UserNew": {
             "type": "object",
             "required": [
                 "email",
@@ -586,15 +821,15 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "johndoe@mail.com"
+                    "example": "emirkovacevic@protonmail.com"
                 },
                 "first_name": {
                     "type": "string",
-                    "example": "John"
+                    "example": "Emir"
                 },
                 "last_name": {
                     "type": "string",
-                    "example": "Doe"
+                    "example": "Kovacevic"
                 },
                 "location": {
                     "type": "string",
@@ -602,26 +837,26 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
-                    "example": "password123"
-                }
-            }
-        },
-        "models.Organisation": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "_id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "My Organization"
+                    "example": "password123As!"
                 }
             }
         },
         "responses.AuthResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.ItemResponse": {
             "type": "object",
             "properties": {
                 "data": {

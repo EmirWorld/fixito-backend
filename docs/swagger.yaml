@@ -5,28 +5,83 @@ definitions:
         example: emirkovacevic@protonmail.com
         type: string
       password:
-        example: 408660As!
+        example: password123As!
         type: string
     required:
     - email
     - password
     type: object
-  models.NewUser:
+  models.ItemNew:
+    properties:
+      description:
+        example: My Item Description
+        type: string
+      name:
+        example: My Item
+        type: string
+      price:
+        $ref: '#/definitions/models.Price'
+      quantity:
+        example: 123
+        type: integer
+    required:
+    - description
+    - name
+    - price
+    - quantity
+    type: object
+  models.OrganisationNew:
+    properties:
+      address:
+        example: 123 Main St
+        type: string
+      description:
+        example: My Organization Description
+        type: string
+      logo:
+        example: https://www.example.com/logo.png
+        type: string
+      name:
+        example: My Organization
+        type: string
+      phone:
+        example: "1234567890"
+        type: string
+    required:
+    - address
+    - description
+    - logo
+    - name
+    - phone
+    type: object
+  models.Price:
+    properties:
+      amount:
+        example: 123
+        type: integer
+      currency:
+        example: USD
+        type: string
+    required:
+    - amount
+    - currency
+    type: object
+  models.UserNew:
     properties:
       email:
-        example: johndoe@mail.com
+        example: emirkovacevic@protonmail.com
         type: string
       first_name:
-        example: John
+        example: Emir
         type: string
       last_name:
-        example: Doe
+        example: Kovacevic
         type: string
       location:
         example: New York
         type: string
       password:
-        example: password123
+        example: password123As!
         type: string
     required:
     - email
@@ -35,17 +90,17 @@ definitions:
     - location
     - password
     type: object
-  models.Organisation:
-    properties:
-      _id:
-        type: string
-      name:
-        example: My Organization
-        type: string
-    required:
-    - name
-    type: object
   responses.AuthResponse:
+    properties:
+      data:
+        additionalProperties: true
+        type: object
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  responses.ItemResponse:
     properties:
       data:
         additionalProperties: true
@@ -139,6 +194,101 @@ paths:
       summary: Logout a user
       tags:
       - Auth
+  /api/item/{itemId}:
+    get:
+      consumes:
+      - application/json
+      description: Gets an item
+      parameters:
+      - description: Item ID
+        in: path
+        name: itemId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+      security:
+      - BearerAuth: []
+      summary: Get an item
+      tags:
+      - Item
+  /api/item/{organisationId}:
+    post:
+      consumes:
+      - application/json
+      description: Creates an item
+      parameters:
+      - description: Organisation ID
+        in: path
+        name: organisationId
+        required: true
+        type: string
+      - description: Item data
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemNew'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+      security:
+      - BearerAuth: []
+      summary: Create an item
+      tags:
+      - Item
+  /api/items/{organisationId}:
+    get:
+      consumes:
+      - application/json
+      description: Gets items
+      parameters:
+      - description: Organisation ID
+        in: path
+        name: organisationId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+      security:
+      - BearerAuth: []
+      summary: Get items
+      tags:
+      - Item
   /api/organisation:
     post:
       consumes:
@@ -150,7 +300,7 @@ paths:
         name: organisation
         required: true
         schema:
-          $ref: '#/definitions/models.Organisation'
+          $ref: '#/definitions/models.OrganisationNew'
       produces:
       - application/json
       responses:
@@ -247,7 +397,7 @@ paths:
         name: organisation
         required: true
         schema:
-          $ref: '#/definitions/models.Organisation'
+          $ref: '#/definitions/models.OrganisationNew'
       produces:
       - application/json
       responses:
@@ -279,7 +429,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.NewUser'
+          $ref: '#/definitions/models.UserNew'
       produces:
       - application/json
       responses:
@@ -324,6 +474,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/responses.UserResponse'
+      security:
+      - BearerAuth: []
       summary: Delete a user
       tags:
       - Users
@@ -376,7 +528,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.NewUser'
+          $ref: '#/definitions/models.UserNew'
       produces:
       - application/json
       responses:
@@ -392,6 +544,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/responses.UserResponse'
+      security:
+      - BearerAuth: []
       summary: Update a user
       tags:
       - Users

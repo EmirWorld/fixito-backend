@@ -12,11 +12,11 @@ type UserPublic struct {
 	RoleID         int                 `json:"role_id,omitempty" bson:"role_id,omitempty"`
 }
 
-type NewUser struct {
-	FirstName string `json:"first_name" bson:"first_name" validate:"required" example:"John"`
-	LastName  string `json:"last_name" bson:"last_name" validate:"required" example:"Doe"`
-	Email     string `json:"email" bson:"email" validate:"required" example:"johndoe@mail.com"`
-	Password  string `json:"password" bson:"password" validate:"required" example:"password123"`
+type UserNew struct {
+	FirstName string `json:"first_name" bson:"first_name" validate:"required" example:"Emir"`
+	LastName  string `json:"last_name" bson:"last_name" validate:"required" example:"Kovacevic"`
+	Email     string `json:"email" bson:"email" validate:"required" example:"emirkovacevic@protonmail.com"`
+	Password  string `json:"password" bson:"password" validate:"required" example:"password123As!"`
 	Location  string `json:"location" bson:"location" validate:"required" example:"New York"`
 }
 
@@ -27,6 +27,7 @@ type User struct {
 	Email          string              `json:"email" bson:"email" validate:"required"`
 	Password       string              `json:"password" bson:"password" validate:"required"`
 	Location       string              `json:"location" bson:"location" validate:"required"`
-	OrganisationID *primitive.ObjectID `json:"organisation_id,omitempty" bson:"organisation_id,omitempty"`
+	OrganisationID *primitive.ObjectID `json:"organisation_id,omitempty"  bson:"organisation_id,omitempty"`
 	RoleID         int                 `json:"role_id,omitempty" bson:"role_id,omitempty"`
+	UpdatedAt      primitive.DateTime  `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }

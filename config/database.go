@@ -33,5 +33,5 @@ func ConnectDatabase() *mongo.Client {
 var Database *mongo.Client = ConnectDatabase()
 
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	return client.Database("fixito_db").Collection(collectionName)
+	return client.Database("possible_db").Collection(collectionName)
 }

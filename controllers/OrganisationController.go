@@ -22,7 +22,7 @@ var organisationCollection *mongo.Collection = config.GetCollection(config.Datab
 // @Tags Organisation
 // @Accept json
 // @Produce json
-// @Param organisation body models.Organisation true "Organisation data"
+// @Param organisation body models.OrganisationNew true "Organisation data"
 // @Success 200 {object} responses.OrganisationResponse
 // @Failure 400 {object} responses.OrganisationResponse
 // @Failure 500 {object} responses.OrganisationResponse
@@ -38,7 +38,7 @@ func CreateOrganisation() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		userID, ok := claims["user_id"].(string)
 		userObjectID, _ := primitive.ObjectIDFromHex(userID)
-		var organisation *models.Organisation
+		var organisation *models.OrganisationNew
 		defer cancel()
 
 		if !ok {
@@ -78,7 +78,13 @@ func CreateOrganisation() gin.HandlerFunc {
 		}
 
 		newOrganisation := models.Organisation{
-			Name: organisation.Name,
+			Name:        organisation.Name,
+			Description: organisation.Description,
+			Phone:       organisation.Phone,
+			Address:     organisation.Address,
+			Logo:        organisation.Logo,
+			UpdatedAt:   time.Now(),
+			CreatedAt:   time.Now(),
 		}
 
 		result, err := organisationCollection.InsertOne(ctx, newOrganisation)
@@ -137,7 +143,7 @@ func GetOrganisation() gin.HandlerFunc {
 // @Accept json
 // @Produce json
 // @Param organisationId path string true "Organisation ID"
-// @Param organisation body models.Organisation true "Organisation object to be updated"
+// @Param organisation body models.OrganisationNew true "Organisation object to be updated"
 // @Success 200 {object} responses.OrganisationResponse
 // @Failure 400 {object} responses.OrganisationResponse
 // @Failure 500 {object} responses.OrganisationResponse
@@ -148,7 +154,7 @@ func UpdateOrganisation() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		organisationID := c.Param("organisationId")
 		organisationObjectID, _ := primitive.ObjectIDFromHex(organisationID)
-		var organisation *models.Organisation
+		var organisation *models.OrganisationNew
 		defer cancel()
 
 		// Bind the JSON body to the struct
@@ -163,7 +169,7 @@ func UpdateOrganisation() gin.HandlerFunc {
 			return
 		}
 
-		update := bson.M{"$set": bson.M{"name": organisation.Name}}
+		update := bson.M{"$set": bson.M{"name": organisation.Name, "description": organisation.Description, "logo": organisation.Logo, "address": organisation.Address, "phone": organisation.Phone, "updated_at": time.Now()}}
 		_, err := organisationCollection.UpdateOne(ctx, bson.M{"_id": organisationObjectID}, update)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responses.OrganisationResponse{Status: http.StatusInternalServerError, Message: "Error updating organisation", Data: map[string]interface{}{"data": err.Error()}})
@@ -190,12 +196,15 @@ func UpdateOrganisation() gin.HandlerFunc {
 // @Security BearerAuth
 func DeleteOrganisation() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		//get organisation ID
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		organisationID := c.Param("organisationId")
 		organisationObjectID, _ := primitive.ObjectIDFromHex(organisationID)
 		defer cancel()
 
-		//delete organisation
+		//TODO: check if organisation has users and delete id from users
+
+		//Delete organisation
 		_, err := organisationCollection.DeleteOne(ctx, bson.M{"_id": organisationObjectID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responses.OrganisationResponse{Status: http.StatusInternalServerError, Message: "Error deleting organisation", Data: map[string]interface{}{"data": err.Error()}})

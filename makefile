@@ -33,3 +33,4 @@ build-dev:
 	swag init
 	chmod +x fix-swagger-files.sh
 	go build -v main.go
+

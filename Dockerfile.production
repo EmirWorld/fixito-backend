@@ -1,6 +1,6 @@
 FROM golang:latest
 
-RUN apt-get update && apt-get install make bash
+RUN apt-get update && apt-get install -y make bash
 
 WORKDIR /app
 
@@ -10,7 +10,6 @@ RUN go mod download -x
 
 COPY --from=itinance/swag /root/swag /usr/local/bin
 
-RUN go install -mod=mod github.com/githubnemo/CompileDaemon
 RUN go install -mod=mod github.com/swaggo/swag/cmd/swag@latest
 
-ENTRYPOINT -exclude-dir=.git -exclude-dir=docs --build="make build-dev" --command=./main
+ENTRYPOINT -exclude-dir=.git -exclude-dir=docs --build="make build" --command=./main

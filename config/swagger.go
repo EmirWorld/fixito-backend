@@ -7,7 +7,7 @@ func SetupSwagger() {
 	swaggerTitle := "possible API"
 	swaggerDescription := "possible is a compact and efficient Point of Sale (POS) system specifically designed for small businesses, particularly those operating in the automotive repair industry, such as car fix shops. This application serves as a comprehensive solution that helps streamline business operations and enhance efficiency for these establishments."
 	swaggerVersion := "1.0"
-	swaggerBasePath := "/v1/api/"
+	swaggerBasePath := "/v1"
 	swaggerSchemes := []string{"http", "https"}
 
 	// Update SwaggerInfo properties

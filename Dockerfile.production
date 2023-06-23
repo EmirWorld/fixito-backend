@@ -12,4 +12,4 @@ COPY --from=itinance/swag /root/swag /usr/local/bin
 
 RUN go install -mod=mod github.com/swaggo/swag/cmd/swag@latest
 
-ENTRYPOINT -exclude-dir=.git -exclude-dir=docs --build="make build" --command=./main
+ENTRYPOINT -exclude-dir=.git -exclude-dir=docs --build="make build-dev" --command=./main

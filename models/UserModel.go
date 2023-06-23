@@ -8,7 +8,7 @@ type UserPublic struct {
 	LastName       string              `json:"last_name" bson:"last_name" validate:"required"`
 	Email          string              `json:"email" bson:"email" validate:"required"`
 	Location       string              `json:"location" bson:"location" validate:"required"`
-	OrganisationID *primitive.ObjectID `json:"organization_id,omitempty" bson:"organization_id,omitempty"`
+	OrganisationID *primitive.ObjectID `json:"organisation_id,omitempty" bson:"organisation_id,omitempty"`
 	RoleID         int                 `json:"role_id,omitempty" bson:"role_id,omitempty"`
 }
 

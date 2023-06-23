@@ -1,11 +1,11 @@
 package router
 
 import (
-	"fixito-backend/controllers"
-	"fixito-backend/middleware"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"possible-backend/controllers"
+	"possible-backend/middleware"
 )
 
 // SetupRouter is a function to set up all routes

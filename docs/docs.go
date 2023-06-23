@@ -765,7 +765,6 @@ const docTemplate = `{
             "required": [
                 "address",
                 "description",
-                "logo",
                 "name",
                 "phone"
             ],

@@ -50,7 +50,6 @@ definitions:
     required:
     - address
     - description
-    - logo
     - name
     - phone
     type: object

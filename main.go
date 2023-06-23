@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/gob"
-	"fixito-backend/config"
-	"fixito-backend/router"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"possible-backend/config"
+	"possible-backend/router"
 
 	"time"
 )

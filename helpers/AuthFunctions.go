@@ -1,11 +1,11 @@
 package helpers
 
 import (
-	"fixito-backend/responses"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"possible-backend/responses"
 	"strings"
 )
 

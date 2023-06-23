@@ -2,11 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fixito-backend/config"
-	"fixito-backend/helpers"
-	"fixito-backend/models"
-	"fixito-backend/responses"
-	"fixito-backend/validators"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -15,6 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"possible-backend/config"
+	"possible-backend/helpers"
+	"possible-backend/models"
+	"possible-backend/responses"
+	"possible-backend/validators"
 	"time"
 )
 

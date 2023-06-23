@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"context"
-	"fixito-backend/config"
-	"fixito-backend/models"
-	"fixito-backend/responses"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
+	"possible-backend/config"
+	"possible-backend/models"
+	"possible-backend/responses"
 	"time"
 )
 

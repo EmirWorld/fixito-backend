@@ -1,4 +1,4 @@
-module fixito-backend
+module possible-backend
 
 go 1.20
 

@@ -10,7 +10,7 @@ type OrganisationNew struct {
 	Description string `json:"description" bson:"description" validate:"required" example:"My Organization Description"`
 	Phone       string `json:"phone" bson:"phone" validate:"required" example:"1234567890"`
 	Address     string `json:"address" bson:"address" validate:"required" example:"123 Main St"`
-	Logo        string `json:"logo" bson:"logo" validate:"required" example:"https://www.example.com/logo.png"`
+	Logo        string `json:"logo" bson:"logo"  example:"https://www.example.com/logo.png"`
 }
 
 type Organisation struct {

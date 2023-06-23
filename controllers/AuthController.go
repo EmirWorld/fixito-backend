@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fixito-backend/models"
-	"fixito-backend/responses"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/sessions"
@@ -13,6 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"possible-backend/models"
+	"possible-backend/responses"
 	"time"
 )
 

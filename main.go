@@ -22,6 +22,7 @@ func main() {
 	r.Use(sessions.Sessions("auth-session", authStore))
 	config.ConnectDatabase()
 	config.SetupSwagger()
+	fmt.Print("Server running on port 9090")
 	router.SetupRouter(r)
 	fmt.Print("Server running on port 9090")
 	r.Run("0.0.0.0:9090")

@@ -16,4 +16,4 @@ RUN go build -o main main.go
 RUN swag init
 RUN chmod +x fix-swagger-files.sh
 
-ENTRYPOINT -exclude-dir=.git -exclude-dir=docs --command=./main
+ENTRYPOINT ["./app"]

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/gob"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -22,5 +23,6 @@ func main() {
 	config.ConnectDatabase()
 	config.SetupSwagger()
 	router.SetupRouter(r)
+	fmt.Print("Server running on port 9090")
 	r.Run(":9090")
 }

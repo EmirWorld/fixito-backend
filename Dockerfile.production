@@ -12,4 +12,8 @@ COPY --from=itinance/swag /root/swag /usr/local/bin
 
 RUN go install -mod=mod github.com/swaggo/swag/cmd/swag@latest
 
-ENTRYPOINT -exclude-dir=.git -exclude-dir=docs --build="make build-dev" --command=./main
+RUN go build -o main main.go
+RUN swag init
+RUN chmod +x fix-swagger-files.sh
+
+ENTRYPOINT -exclude-dir=.git -exclude-dir=docs --command=./main

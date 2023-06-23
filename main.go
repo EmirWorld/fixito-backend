@@ -24,5 +24,5 @@ func main() {
 	config.SetupSwagger()
 	router.SetupRouter(r)
 	fmt.Print("Server running on port 9090")
-	r.Run(":9090")
+	r.Run("0.0.0.0:9090")
 }

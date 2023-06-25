@@ -5,7 +5,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"possible-backend/responses"
+	"poosible-backend/responses"
 	"strings"
 )
 

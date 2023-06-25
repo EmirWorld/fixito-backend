@@ -2,11 +2,12 @@ package main
 
 import (
 	"encoding/gob"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"possible-backend/config"
-	"possible-backend/router"
+	"poosible-backend/config"
+	"poosible-backend/router"
 
 	"time"
 )
@@ -22,5 +23,6 @@ func main() {
 	config.ConnectDatabase()
 	config.SetupSwagger()
 	router.SetupRouter(r)
+	fmt.Print("Server running at http://localhost:9090")
 	r.Run("0.0.0.0:9090")
 }

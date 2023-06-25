@@ -1,11 +1,11 @@
 package config
 
-import "possible-backend/docs"
+import "poosible-backend/docs"
 
 func SetupSwagger() {
 	// Set Swagger information programmatically
-	swaggerTitle := "possible API"
-	swaggerDescription := "possible is a compact and efficient Point of Sale (POS) system specifically designed for small businesses, particularly those operating in the automotive repair industry, such as car fix shops. This application serves as a comprehensive solution that helps streamline business operations and enhance efficiency for these establishments."
+	swaggerTitle := "poosible API"
+	swaggerDescription := "poosible is a compact and efficient Point of Sale (POS) system specifically designed for small businesses, particularly those operating in the automotive repair industry, such as car fix shops. This application serves as a comprehensive solution that helps streamline business operations and enhance efficiency for these establishments."
 	swaggerVersion := "1.0"
 	swaggerBasePath := "/v1"
 	swaggerSchemes := []string{"http", "https"}

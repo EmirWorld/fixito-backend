@@ -11,8 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"possible-backend/models"
-	"possible-backend/responses"
+	"poosible-backend/models"
+	"poosible-backend/responses"
 	"time"
 )
 

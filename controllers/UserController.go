@@ -10,11 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"possible-backend/config"
-	"possible-backend/helpers"
-	"possible-backend/models"
-	"possible-backend/responses"
-	"possible-backend/validators"
+	"poosible-backend/config"
+	"poosible-backend/helpers"
+	"poosible-backend/models"
+	"poosible-backend/responses"
+	"poosible-backend/validators"
 	"time"
 )
 

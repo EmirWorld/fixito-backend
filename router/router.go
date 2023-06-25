@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"possible-backend/controllers"
-	"possible-backend/middleware"
+	"poosible-backend/controllers"
+	"poosible-backend/middleware"
 )
 
 // SetupRouter is a function to set up all routes

@@ -31,6 +31,39 @@ definitions:
     - quantity
     type: object
   models.OrganisationNew:
+    properties:
+      address:
+        example: 123 Main St
+        type: string
+      country_code:
+        example: 36
+        type: integer
+      currency_code:
+        example: 840
+        type: integer
+      description:
+        example: My Organization Description
+        type: string
+      logo:
+        example: https://www.example.com/logo.png
+        type: string
+      name:
+        example: My Organization
+        type: string
+      phone:
+        example: "1234567890"
+        type: string
+      zip_code:
+        example: "12345"
+        type: string
+    required:
+    - address
+    - country_code
+    - currency_code
+    - description
+    - name
+    - phone
+    - zip_code
     type: object
   models.Price:
     properties:
@@ -172,6 +205,52 @@ paths:
       summary: Logout a user
       tags:
       - Auth
+  /api/helper/countries:
+    get:
+      consumes:
+      - application/json
+      description: Get all countries
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+      summary: Get all countries
+      tags:
+      - Helper
+  /api/helper/currencies:
+    get:
+      consumes:
+      - application/json
+      description: Get all currencies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+      summary: Get all currencies
+      tags:
+      - Helper
   /api/item/{itemId}:
     get:
       consumes:

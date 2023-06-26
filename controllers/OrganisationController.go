@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"context"
+	"fmt"
+	"github.com/biter777/countries"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -83,6 +85,9 @@ func CreateOrganisation() gin.HandlerFunc {
 			Phone:       organisation.Phone,
 			Address:     organisation.Address,
 			Logo:        organisation.Logo,
+			Country:     organisation.Country,
+			Currency:    organisation.Currency,
+			ZipCode:     organisation.ZipCode,
 			UpdatedAt:   time.Now(),
 			CreatedAt:   time.Now(),
 		}
@@ -132,7 +137,21 @@ func GetOrganisation() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, responses.OrganisationResponse{Status: http.StatusOK, Message: "Organisation retrieved successfully", Data: map[string]interface{}{"data": organisation}})
+		fmt.Println(organisation.Country)
+
+		organisationPublic := models.OrganisationPublic{
+			ID:          organisation.ID,
+			Name:        organisation.Name,
+			Description: organisation.Description,
+			Phone:       organisation.Phone,
+			Logo:        organisation.Logo,
+			Country:     countries.ByNumeric(organisation.Country).Info().Name,
+			Address:     organisation.Address,
+			ZipCode:     organisation.ZipCode,
+			Currency:    countries.ByNumeric(organisation.Currency).Currency().Alpha(),
+		}
+
+		c.JSON(http.StatusOK, responses.OrganisationResponse{Status: http.StatusOK, Message: "Organisation retrieved successfully", Data: map[string]interface{}{"data": organisationPublic}})
 	}
 }
 
@@ -169,7 +188,7 @@ func UpdateOrganisation() gin.HandlerFunc {
 			return
 		}
 
-		update := bson.M{"$set": bson.M{"name": organisation.Name, "description": organisation.Description, "logo": organisation.Logo, "address": organisation.Address, "phone": organisation.Phone, "updated_at": time.Now()}}
+		update := bson.M{"$set": bson.M{"name": organisation.Name, "country_code": organisation.Country, "currency_code": organisation.Country, "zip_code": organisation.ZipCode, "description": organisation.Description, "logo": organisation.Logo, "address": organisation.Address, "phone": organisation.Phone, "updated_at": time.Now()}}
 		_, err := organisationCollection.UpdateOne(ctx, bson.M{"_id": organisationObjectID}, update)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responses.OrganisationResponse{Status: http.StatusInternalServerError, Message: "Error updating organisation", Data: map[string]interface{}{"data": err.Error()}})

@@ -22,7 +22,7 @@ import (
 func Currencies() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		currencies := countries.AllCurrencies()
+		currencies := countries.AllCurrenciesInfo()
 		defer cancel()
 
 		if len(currencies) == 0 {
@@ -30,7 +30,7 @@ func Currencies() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, responses.HelperResponse{Status: http.StatusOK, Message: "Success", Data: map[string]interface{}{"data": currencies}})
+		c.JSON(http.StatusOK, responses.HelperResponse{Status: http.StatusOK, Message: "Success", Data: map[string]interface{}{"data": currencies, "count": len(currencies)}})
 	}
 }
 
@@ -47,7 +47,7 @@ func Currencies() gin.HandlerFunc {
 func Countries() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		countries := countries.All()
+		countries := countries.AllCapitalsInfo()
 		defer cancel()
 
 		if len(countries) == 0 {
@@ -55,6 +55,6 @@ func Countries() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, responses.HelperResponse{Status: http.StatusOK, Message: "Success", Data: map[string]interface{}{"data": countries}})
+		c.JSON(http.StatusOK, responses.HelperResponse{Status: http.StatusOK, Message: "Success", Data: map[string]interface{}{"data": countries, "count": len(countries)}})
 	}
 }

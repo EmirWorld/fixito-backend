@@ -97,6 +97,76 @@
                 }
             }
         },
+        "/api/helper/countries": {
+            "get": {
+                "description": "Get all countries",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "Get all countries",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/helper/currencies": {
+            "get": {
+                "description": "Get all currencies",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "Get all currencies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ItemResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/item/{itemId}": {
             "get": {
                 "security": [
@@ -749,7 +819,50 @@
             }
         },
         "models.OrganisationNew": {
-            "type": "object"
+            "type": "object",
+            "required": [
+                "address",
+                "country_code",
+                "currency_code",
+                "description",
+                "name",
+                "phone",
+                "zip_code"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "123 Main St"
+                },
+                "country_code": {
+                    "type": "integer",
+                    "example": 36
+                },
+                "currency_code": {
+                    "type": "integer",
+                    "example": 840
+                },
+                "description": {
+                    "type": "string",
+                    "example": "My Organization Description"
+                },
+                "logo": {
+                    "type": "string",
+                    "example": "https://www.example.com/logo.png"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "My Organization"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "1234567890"
+                },
+                "zip_code": {
+                    "type": "string",
+                    "example": "12345"
+                }
+            }
         },
         "models.Price": {
             "type": "object",

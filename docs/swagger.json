@@ -749,35 +749,7 @@
             }
         },
         "models.OrganisationNew": {
-            "type": "object",
-            "required": [
-                "address",
-                "description",
-                "name",
-                "phone"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "example": "123 Main St"
-                },
-                "description": {
-                    "type": "string",
-                    "example": "My Organization Description"
-                },
-                "logo": {
-                    "type": "string",
-                    "example": "https://www.example.com/logo.png"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "My Organization"
-                },
-                "phone": {
-                    "type": "string",
-                    "example": "1234567890"
-                }
-            }
+            "type": "object"
         },
         "models.Price": {
             "type": "object",

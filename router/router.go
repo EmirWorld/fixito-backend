@@ -22,6 +22,10 @@ var SetupRouter = func(router *gin.Engine) {
 		//User Routes
 		v1api.POST("/user", controllers.CreateUser())
 
+		//Helper Routes
+		v1api.GET("/helper/countries", controllers.Countries())
+		v1api.GET("/helper/currencies", controllers.Currencies())
+
 		// Apply the AuthMiddleware to the protected group
 		protectedGroup := v1api.Group("", middleware.AuthMiddleware())
 		{

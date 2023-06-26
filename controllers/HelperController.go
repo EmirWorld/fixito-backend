@@ -47,7 +47,7 @@ func Currencies() gin.HandlerFunc {
 func Countries() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		countries := countries.AllCapitalsInfo()
+		countries := countries.AllInfo()
 		defer cancel()
 
 		if len(countries) == 0 {

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"github.com/biter777/countries"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -137,7 +136,14 @@ func GetOrganisation() gin.HandlerFunc {
 			return
 		}
 
-		fmt.Println(organisation.Country)
+		//get currency alpha
+		currencies := countries.AllCurrenciesInfo()
+		var currencyAlpha string
+		for _, currency := range currencies {
+			if int(currency.Code) == organisation.Currency {
+				currencyAlpha = currency.Alpha
+			}
+		}
 
 		organisationPublic := models.OrganisationPublic{
 			ID:          organisation.ID,
@@ -148,7 +154,7 @@ func GetOrganisation() gin.HandlerFunc {
 			Country:     countries.ByNumeric(organisation.Country).Info().Name,
 			Address:     organisation.Address,
 			ZipCode:     organisation.ZipCode,
-			Currency:    countries.ByNumeric(organisation.Currency).Currency().Alpha(),
+			Currency:    currencyAlpha,
 		}
 
 		c.JSON(http.StatusOK, responses.OrganisationResponse{Status: http.StatusOK, Message: "Organisation retrieved successfully", Data: map[string]interface{}{"data": organisationPublic}})

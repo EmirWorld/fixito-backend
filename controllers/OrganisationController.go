@@ -116,19 +116,30 @@ func CreateOrganisation() gin.HandlerFunc {
 // @Tags Organisation
 // @Accept json
 // @Produce json
-// @Param organisationId path string true "Organisation ID"
 // @Success 200 {object} responses.OrganisationResponse
 // @Failure 400 {object} responses.OrganisationResponse
 // @Failure 500 {object} responses.OrganisationResponse
-// @Router /api/organisation/{organisationId} [get]
+// @Router /api/organisation [get]
 // @Security BearerAuth
 func GetOrganisation() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		organisationID := c.Param("organisationId")
-		organisationObjectID, _ := primitive.ObjectIDFromHex(organisationID)
 		var organisation *models.Organisation
 		defer cancel()
+
+		user, _err := CurrentUser(c)
+		if _err != nil {
+			c.JSON(http.StatusInternalServerError, responses.OrganisationResponse{Status: http.StatusInternalServerError, Message: "Error getting user", Data: map[string]interface{}{"data": _err.Error()}})
+			return
+		}
+
+		if user.OrganisationID == nil {
+			c.JSON(http.StatusBadRequest, responses.OrganisationResponse{Status: http.StatusBadRequest, Message: "Bad request", Data: map[string]interface{}{"data": "User does not have an organisation"}})
+			return
+
+		}
+
+		organisationObjectID, _err := primitive.ObjectIDFromHex(user.OrganisationID.Hex())
 
 		err := organisationCollection.FindOne(ctx, bson.M{"_id": organisationObjectID}).Decode(&organisation)
 		if err != nil {

@@ -69,13 +69,11 @@ definitions:
     properties:
       amount:
         example: 123
-        type: integer
+        type: number
       currency:
-        example: USD
         type: string
     required:
     - amount
-    - currency
     type: object
   models.UserNew:
     properties:
@@ -251,6 +249,38 @@ paths:
       summary: Get all currencies
       tags:
       - Helper
+  /api/item:
+    post:
+      consumes:
+      - application/json
+      description: Creates an item
+      parameters:
+      - description: Item data
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemNew'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ItemResponse'
+      security:
+      - BearerAuth: []
+      summary: Create an item
+      tags:
+      - Item
   /api/item/{itemId}:
     get:
       consumes:
@@ -282,54 +312,11 @@ paths:
       summary: Get an item
       tags:
       - Item
-  /api/item/{organisationId}:
-    post:
-      consumes:
-      - application/json
-      description: Creates an item
-      parameters:
-      - description: Organisation ID
-        in: path
-        name: organisationId
-        required: true
-        type: string
-      - description: Item data
-        in: body
-        name: item
-        required: true
-        schema:
-          $ref: '#/definitions/models.ItemNew'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.ItemResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/responses.ItemResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/responses.ItemResponse'
-      security:
-      - BearerAuth: []
-      summary: Create an item
-      tags:
-      - Item
-  /api/items/{organisationId}:
+  /api/items:
     get:
       consumes:
       - application/json
       description: Gets items
-      parameters:
-      - description: Organisation ID
-        in: path
-        name: organisationId
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -347,6 +334,30 @@ paths:
       tags:
       - Item
   /api/organisation:
+    get:
+      consumes:
+      - application/json
+      description: Gets an organisation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.OrganisationResponse'
+      security:
+      - BearerAuth: []
+      summary: Get an organisation
+      tags:
+      - Organisation
     post:
       consumes:
       - application/json
@@ -407,36 +418,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Delete an organisation
-      tags:
-      - Organisation
-    get:
-      consumes:
-      - application/json
-      description: Gets an organisation
-      parameters:
-      - description: Organisation ID
-        in: path
-        name: organisationId
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responses.OrganisationResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/responses.OrganisationResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/responses.OrganisationResponse'
-      security:
-      - BearerAuth: []
-      summary: Get an organisation
       tags:
       - Organisation
     put:

@@ -270,3 +270,29 @@ func GetCurrentUser() gin.HandlerFunc {
 		c.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success", Data: map[string]interface{}{"data": user}})
 	}
 }
+
+func CurrentUser(c *gin.Context) (*models.UserPublic, error) {
+	claims, err := helpers.GetClaims(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": err.Error()}})
+		return nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	userID, ok := claims["user_id"].(string)
+	objId, _ := primitive.ObjectIDFromHex(userID)
+	defer cancel()
+	if !ok {
+		c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": "Invalid  user claims"}})
+		return nil, err
+	}
+	var user *models.UserPublic
+
+	err = userCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "Error getting user", Data: map[string]interface{}{"data": err.Error()}})
+		return nil, err
+	}
+
+	return user, nil
+}

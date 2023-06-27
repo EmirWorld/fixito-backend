@@ -39,14 +39,14 @@ var SetupRouter = func(router *gin.Engine) {
 
 			//Organization Routes
 			protectedGroup.POST("/organisation", controllers.CreateOrganisation())
-			protectedGroup.GET("/organisation/:organisationId", controllers.GetOrganisation())
+			protectedGroup.GET("/organisation", controllers.GetOrganisation())
 			protectedGroup.PUT("/organisation/:organisationId", controllers.UpdateOrganisation())
 			protectedGroup.DELETE("/organisation/:organisationId", controllers.DeleteOrganisation())
 
 			//Item Routes
-			protectedGroup.POST("/item/:organisationId", controllers.CreateItem())
+			protectedGroup.POST("/item", controllers.CreateItem())
 			protectedGroup.GET("/item/:itemId", controllers.GetItem())
-			protectedGroup.GET("/items/:organisationId", controllers.GetItems())
+			protectedGroup.GET("/items", controllers.GetItems())
 			protectedGroup.PUT("/item/:itemId", controllers.UpdateItem())
 		}
 

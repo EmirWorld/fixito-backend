@@ -6,6 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,6 +14,7 @@ import (
 	"net/http"
 	"poosible-backend/models"
 	"poosible-backend/responses"
+	"strings"
 	"time"
 )
 
@@ -66,13 +68,14 @@ func Login() gin.HandlerFunc {
 		var credentials *models.Credentials
 
 		//Validate the request body
-		if err := c.BindJSON(&credentials); err != nil {
-			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid request body", Data: map[string]interface{}{"data": err.Error()}})
+		if err := c.BindWith(&credentials, binding.JSON); err != nil {
+			c.JSON(http.StatusBadRequest, responses.AuthResponse{Status: http.StatusBadRequest, Message: "Invalid request body", Data: map[string]interface{}{"data": err.Error()}})
 			return
 		}
+		credentials.Email = strings.ToLower(credentials.Email)
 
 		//Use validators library to validate the email and password
-		if err := validate.Struct(credentials); err != nil {
+		if err := validate.Struct(*credentials); err != nil {
 			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid input fields", Data: map[string]interface{}{"data": err.Error()}})
 			return
 		}

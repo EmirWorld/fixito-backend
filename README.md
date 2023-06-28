@@ -45,8 +45,8 @@ That's it! You now have the Poosible Backend up and running locally on your mach
 ## 📝 API Documentation
 
 The Poosible Backend provides the following API endpoints:
-
-- `/api/users` - User-related endpoints (register, login, update profile, etc.)
+- `/api/auth` - Auth-related endpoints (login, logout)
+- `/api/users` - User-related endpoints (register, update profile, etc.)
 - `/api/projects` - Project-related endpoints (create, update, delete, etc.)
 - `/api/tasks` - Task-related endpoints (create, update, delete, etc.)
 - `/api/comments` - Comment-related endpoints (create, update, delete, etc.)

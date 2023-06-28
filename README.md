@@ -50,7 +50,7 @@ The Poosible Backend provides the following API endpoints:
 - `/api/tasks` - Task-related endpoints (create, update, delete, etc.)
 - `/api/comments` - Comment-related endpoints (create, update, delete, etc.)
 
-For detailed documentation on each endpoint, please refer to the [API Documentation](API_DOCUMENTATION.md).
+For detailed documentation on each endpoint, please refer to the [API Documentation](API_DOCUMENTATION.md). `Comming soon...`
 
 ## 🐳 Docker
 

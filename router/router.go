@@ -48,6 +48,7 @@ var SetupRouter = func(router *gin.Engine) {
 			protectedGroup.GET("/item/:itemId", controllers.GetItem())
 			protectedGroup.GET("/items", controllers.GetItems())
 			protectedGroup.PUT("/item/:itemId", controllers.UpdateItem())
+			protectedGroup.DELETE("/item/:itemId", controllers.DeleteItem())
 		}
 
 	}

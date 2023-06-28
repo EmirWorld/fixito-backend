@@ -203,8 +203,44 @@ func UpdateItem() gin.HandlerFunc {
 	}
 }
 
+// DeleteItem godoc
+// @Summary Delete an item
+// @Description Deletes an item
+// @Tags Item
+// @Accept json
+// @Produce json
+// @Param itemId path string true "Item ID"
+// @Success 200 {object} responses.ItemResponse
+// @Failure 404 {object} responses.ItemResponse
+// @Failure 500 {object} responses.ItemResponse
+// @Router /api/item/{itemId} [delete]
+// @Security BearerAuth
 func DeleteItem() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		itemId := c.Param("itemId")
+		itemObjectId, _ := primitive.ObjectIDFromHex(itemId)
+		defer cancel()
 
+		// Check if the item exists
+		err := itemCollection.FindOne(ctx, bson.M{"_id": itemObjectId}).Err()
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				c.JSON(http.StatusNotFound, responses.ItemResponse{Status: http.StatusNotFound, Message: "Item not found", Data: map[string]interface{}{"data": err.Error()}})
+				return
+			}
+			c.JSON(http.StatusInternalServerError, responses.ItemResponse{Status: http.StatusInternalServerError, Message: "Internal server error", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		// Find the item in the database
+		result, err := itemCollection.DeleteOne(ctx, bson.M{"_id": itemObjectId})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, responses.ItemResponse{Status: http.StatusInternalServerError, Message: "Internal server error", Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		// Return the item
+		c.JSON(http.StatusOK, responses.ItemResponse{Status: http.StatusOK, Message: "Item deleted", Data: map[string]interface{}{"data": result}})
 	}
 }

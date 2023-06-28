@@ -906,8 +906,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "amount": {
-                    "type": "integer",
-                    "example": 123
+                    "type": "string",
+                    "example": "123"
                 },
                 "currency": {
                     "type": "string"

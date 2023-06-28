@@ -69,8 +69,8 @@ definitions:
   models.Price:
     properties:
       amount:
-        example: 123
-        type: integer
+        example: "123"
+        type: string
       currency:
         type: string
     required:

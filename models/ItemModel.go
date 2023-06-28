@@ -8,7 +8,7 @@ import (
 //TODO: Add Currency Enums
 
 type Price struct {
-	Amount   int    `json:"amount" bson:"amount" validate:"required" example:"123"`
+	Amount   string `json:"amount" bson:"amount" validate:"required" example:"123"`
 	Currency string `json:"currency" bson:"currency"`
 }
 

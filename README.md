@@ -2,7 +2,17 @@
 Fixito POS is a mobile application specifically designed to streamline store management, organization, and inventory.
 # Poosible Backend 🌟
 
-Welcome to the Poosible Backend repository! This repository contains the backend code for the Poosible project. Poosible is a platform that aims to connect individuals with different skills and interests to collaborate on possible projects and bring their ideas to life.
+Welcome to the Poosible Backend repository! This repository contains the backend code for the Poosible project. Poosible is a Point of Sale (POS) system designed to cater to the needs of small businesses. It offers inventory management and transaction organization features to empower small business owners in handling their operations effectively.
+
+## 💡 Key Features
+
+Inventory Management: With Poosible, businesses can easily manage their inventory by keeping track of available products, monitoring stock levels, and receiving alerts for low stock or out-of-stock items. This helps businesses stay informed and ensures they can meet customer demands effectively.
+
+Item Organization: Poosible allows businesses to organize their items efficiently. It enables the creation of categories, tags, and attributes for items, making it easier to navigate and search for specific products. This feature enhances the overall organization and accessibility of products within the system.
+
+Customer Management: Poosible enables businesses to maintain a database of customers, including their contact information and purchase history. This feature helps businesses build stronger relationships with customers by providing personalized experiences and targeted marketing campaigns.
+
+Reporting and Analytics: Poosible offers comprehensive reporting and analytics tools that provide valuable insights into business performance. It generates reports on sales, inventory, and customer data, enabling business owners to make data-driven decisions and identify areas for improvement.
 
 ## 🚀 Getting Started
 
@@ -70,6 +80,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📧 Contact
 
-If you have any questions or suggestions regarding the Poosible Backend, feel free to reach out to us at [contact@poosible.com](mailto:emirkovacevic@protonmail.com).
+If you have any questions or suggestions regarding the Poosible Backend, feel free to reach out to us at [Emir Kovacevic](mailto:emirkovacevic@protonmail.com).
 
 Let's make amazing things Poosible together! ✨🙌

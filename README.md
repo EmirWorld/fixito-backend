@@ -17,9 +17,8 @@ Reporting and Analytics: Poosible offers comprehensive reporting and analytics t
 To get started with the Poosible Backend, follow these steps:
 
 1. Clone this repository: `git clone https://github.com/EmirWorld/poosible-backend.git`
-2. Install the required dependencies: `npm install`
-3. Set up the environment variables by creating a `.env` file and filling in the necessary details. You can use the provided `.env.example` file as a template.
-4. Start the server: `npm start`
+2. Install the required dependencies: `go mod init`
+4. Start the server: `go run main.go`
 
 That's it! You now have the Poosible Backend up and running locally on your machine.
 

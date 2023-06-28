@@ -31,14 +31,14 @@ That's it! You now have the Poosible Backend up and running locally on your mach
 ├── routes/           # Defines the API routes and their corresponding controllers
 ├── services/         # Contains the business logic for different features
 ├── utils/            # Utility functions and helpers
-├── app.js            # Entry point of the application
+├── main.go           # Entry point of the application
 └── ...
 ```
 
 ## 🛠️ Technologies Used
 
-- Node.js
-- Express.js
+- Golang
+- Gin Gonic Framework
 - MongoDB
 - Mongoose
 

@@ -1,5 +1,3 @@
-# poosible-backend
-Fixito POS is a mobile application specifically designed to streamline store management, organization, and inventory.
 # Poosible Backend 🌟
 
 Welcome to the Poosible Backend repository! This repository contains the backend code for the Poosible project. Poosible is a Point of Sale (POS) system designed to cater to the needs of small businesses. It offers inventory management and transaction organization features to empower small business owners in handling their operations effectively.

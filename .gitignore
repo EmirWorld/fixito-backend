@@ -6,3 +6,7 @@ main
 *.exe
 *.exe~
 /.idea/*
+*.env
+*.env.example
+*.env.local
+*.env.staging

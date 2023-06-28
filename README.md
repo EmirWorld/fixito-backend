@@ -29,7 +29,7 @@ That's it! You now have the Poosible Backend up and running locally on your mach
 ├── controllers/      # Contains the controllers for different API routes
 ├── models/           # Defines the database models using Mongoose
 ├── routes/           # Defines the API routes and their corresponding controllers
-├── services/         # Contains the business logic for different features
+├── config/           # Contains configuration for database and swagger
 ├── utils/            # Utility functions and helpers
 ├── main.go           # Entry point of the application
 └── ...

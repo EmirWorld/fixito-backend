@@ -11,9 +11,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"poosible-backend/config"
-	"poosible-backend/helpers"
 	"poosible-backend/models"
 	"poosible-backend/responses"
+	"poosible-backend/utils"
 	"poosible-backend/validators"
 	"time"
 )
@@ -245,7 +245,7 @@ func DeleteUser() gin.HandlerFunc {
 // @Security BearerAuth
 func GetCurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		claims, err := helpers.GetClaims(c)
+		claims, err := utils.GetClaims(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": err.Error()}})
 			return
@@ -272,7 +272,7 @@ func GetCurrentUser() gin.HandlerFunc {
 }
 
 func CurrentUser(c *gin.Context) (*models.UserPublic, error) {
-	claims, err := helpers.GetClaims(c)
+	claims, err := utils.GetClaims(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "Invalid token", Data: map[string]interface{}{"data": err.Error()}})
 		return nil, err

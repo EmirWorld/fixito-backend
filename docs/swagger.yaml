@@ -22,6 +22,7 @@ definitions:
       price:
         $ref: '#/definitions/models.Price'
       quantity:
+        default: 1
         example: 123
         type: integer
     required:
@@ -69,7 +70,7 @@ definitions:
     properties:
       amount:
         example: 123
-        type: number
+        type: integer
       currency:
         type: string
     required:

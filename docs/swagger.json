@@ -789,6 +789,7 @@
                 },
                 "quantity": {
                     "type": "integer",
+                    "default": 1,
                     "example": 123
                 }
             }
@@ -846,7 +847,7 @@
             ],
             "properties": {
                 "amount": {
-                    "type": "number",
+                    "type": "integer",
                     "example": 123
                 },
                 "currency": {

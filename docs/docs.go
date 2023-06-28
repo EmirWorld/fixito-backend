@@ -801,6 +801,7 @@ const docTemplate = `{
                 },
                 "quantity": {
                     "type": "integer",
+                    "default": 1,
                     "example": 123
                 }
             }
@@ -858,7 +859,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "amount": {
-                    "type": "number",
+                    "type": "integer",
                     "example": 123
                 },
                 "currency": {

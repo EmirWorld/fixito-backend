@@ -92,7 +92,6 @@ func CreateItem() gin.HandlerFunc {
 			Description:    item.Description,
 			OrganisationID: organisationId,
 			Price:          price,
-			Quantity:       item.Quantity,
 			UpdatedAt:      time.Now(),
 			CreatedAt:      time.Now(),
 		}

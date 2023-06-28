@@ -9,9 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 	"poosible-backend/config"
-	"poosible-backend/helpers"
 	"poosible-backend/models"
 	"poosible-backend/responses"
+	"poosible-backend/utils"
 	"time"
 )
 
@@ -31,7 +31,7 @@ var organisationCollection *mongo.Collection = config.GetCollection(config.Datab
 // @Security BearerAuth
 func CreateOrganisation() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		claims, err := helpers.GetClaims(c)
+		claims, err := utils.GetClaims(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, responses.OrganisationResponse{Status: http.StatusBadRequest, Message: "Bad request", Data: map[string]interface{}{"data": err.Error()}})
 			return
